@@ -12,11 +12,11 @@ public class NoSpringApplication {
 
 	public static void main(String[] args) {
 		log.info("No Spring Application");
+		PizzaOrderService orderService = new PizzaOrderServiceImpl();
 
 		Customer customer1 = new Customer("John Smith", "john@smith.com", "Lodz, Jaracza 74");
 		Customer customer2 = new Customer("Jan Kowalski", "jan@kowalski.pl", "Lodz, Piotrkowska 100");
 
-		PizzaOrderService orderService = new PizzaOrderServiceImpl();
 		String orderId1 = orderService.createOrder(customer1, PizzaType.LARGE);
 		String orderId2 = orderService.createOrder(customer2, PizzaType.SMALL);
 
