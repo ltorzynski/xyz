@@ -17,9 +17,11 @@ public class HashMapOrderRepository implements OrderRepository {
 	private static int sequence = 1;
 
 	public String save(PizzaOrder order) {
-		String uniqueId = Integer.valueOf(sequence++)
-									.toString();
-		order.setId(uniqueId);
+		if (order.getId() == null) {
+			String uniqueId = Integer.valueOf(sequence++)
+										.toString();
+			order.setId(uniqueId);
+		}
 		database.put(order.getId(), order);
 		return order.getId();
 

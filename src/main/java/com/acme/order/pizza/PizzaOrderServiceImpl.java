@@ -40,6 +40,15 @@ public class PizzaOrderServiceImpl implements PizzaOrderService {
 		this.mailSender = new MailSender();
 	}
 
+	public PizzaOrderServiceImpl(MailSender mailSender, OrderRepository orderRepository, OrderFactory orderFactory,
+			DeliveryTimeService deliveryTimeService, MessageTemplateService messageTemplate) {
+		this.orderFactory = orderFactory;
+		this.orderRepository = orderRepository;
+		this.deliveryTimeService = deliveryTimeService;
+		this.messageTemplate = messageTemplate;
+		this.mailSender = mailSender;
+	}
+
 	@Override
 	public String createOrder(Customer customer, PizzaType type) {
 		PizzaOrder order = null;
@@ -66,6 +75,7 @@ public class PizzaOrderServiceImpl implements PizzaOrderService {
 		log.info("Cancelling order with id: {}", pizzaOrderId);
 		PizzaOrder order = orderRepository.get(pizzaOrderId);
 		order.cancel();
+		orderRepository.save(order);
 		OrderCancelledTemplate template = messageTemplate.getCancelTemplate();
 		mailSender.send(template, order.getEmail());
 	}
