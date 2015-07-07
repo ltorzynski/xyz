@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="orderService" class="com.acme.order.pizza.PizzaOrderServiceImpl">
-       	<constructor-arg name="mailSender"><bean class="com.acme.order.notification.MailSender"/></constructor-arg>
-       	<constructor-arg name="orderRepository" ref="orderRepository"/>
-       	<constructor-arg name="orderFactory"><bean class="com.acme.order.OrderFactory"/></constructor-arg>
-       	
-       	<constructor-arg name="deliveryTimeService" ref="deliveryTimeService"/>
-       	<constructor-arg name="messageTemplate" ref="messageTemplate"/>
-    </bean>
+	<bean id="orderService" class="com.acme.order.pizza.PizzaOrderServiceImpl">
+		<constructor-arg name="mailSender">
+			<bean class="com.acme.order.notification.MailSender" />
+		</constructor-arg>
+		<constructor-arg name="orderRepository" ref="orderRepository" />
+		<constructor-arg name="orderFactory">
+			<bean class="com.acme.order.OrderFactory" />
+		</constructor-arg>
 
-	<bean id="orderRepository" class="com.acme.order.HashMapOrderRepository"/>
-	
-	<bean id="deliveryTimeService" class="com.acme.order.delivery.BasicDeliveryTimeServiceImpl">
-		<property name="timeService" ref="timeService"/>
-		<property name="strategy" ref="deliveryTimeStrategy"/>
+		<constructor-arg name="deliveryTimeService" ref="deliveryTimeService" />
+		<constructor-arg name="messageTemplate" ref="messageTemplate" />
 	</bean>
+
+	<bean id="orderRepository" class="com.acme.order.HashMapOrderRepository" />
+
+	<bean id="deliveryTimeService" class="com.acme.order.delivery.BasicDeliveryTimeServiceImpl">
+		<property name="timeService" ref="timeService" />
+		<property name="strategy" ref="deliveryTimeStrategy" />
+	</bean>
+
+	<bean id="timeService" class="com.acme.order.delivery.TimeService" />
+
+	<bean id="messageTemplate" class="com.acme.order.notification.SimpleMessageTemplateService" />
+
+	<bean id="deliveryTimeStrategy" class="com.acme.order.delivery.strategy.SimpleDeliveryTimeStrategy" />
 	
-	<bean id="timeService" class="com.acme.order.delivery.TimeService"/>
-	
-	<bean id="messageTemplate" class="com.acme.order.notification.SimpleMessageTemplateService"/>
-	
-	<bean id="deliveryTimeStrategy" class="com.acme.order.delivery.strategy.SimpleDeliveryTimeStrategy"/>
 	<beans profile="pizzaType">
-	<bean id="deliveryTimeStrategy" class="com.acme.order.delivery.strategy.PizzaTypeDeliveryTimeStrategy"/>
- </beans>
+		<bean id="deliveryTimeStrategy" class="com.acme.order.delivery.strategy.PizzaTypeDeliveryTimeStrategy" />
+	</beans>
 </beans>
