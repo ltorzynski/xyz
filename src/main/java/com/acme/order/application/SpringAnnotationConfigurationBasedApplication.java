@@ -7,6 +7,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 
 import com.acme.order.Customer;
@@ -16,6 +18,9 @@ import com.acme.order.OrderRepository;
 import com.acme.order.delivery.BasicDeliveryTimeServiceImpl;
 import com.acme.order.delivery.DeliveryTimeService;
 import com.acme.order.delivery.TimeService;
+import com.acme.order.delivery.strategy.DeliveryTimeStrategy;
+import com.acme.order.delivery.strategy.PizzaTypeDeliveryTimeStrategy;
+import com.acme.order.delivery.strategy.SimpleDeliveryTimeStrategy;
 import com.acme.order.notification.MailSender;
 import com.acme.order.notification.MessageTemplateService;
 import com.acme.order.notification.SimpleMessageTemplateService;
@@ -26,12 +31,13 @@ import com.acme.order.pizza.PizzaType;
 @Slf4j
 @Configuration
 @ComponentScan("com.acme.order")
-public class SpringAnnotationBasedApplication {
+public class SpringAnnotationConfigurationBasedApplication {
 
 	public static void main(String[] args) {
 		log.info("Spring XML based application");
 
-		ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringAnnotationBasedApplication.class);
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(
+				SpringAnnotationConfigurationBasedApplication.class);
 		PizzaOrderService orderService = ctx.getBean(PizzaOrderService.class);
 
 		Customer customer1 = new Customer("John Smith", "john@smith.com", "Lodz, Jaracza 74");
@@ -81,12 +87,17 @@ public class SpringAnnotationBasedApplication {
 		return deliveryTimeService;
 	}
 
-	/*
-	 * @Bean
-	 * public DeliveryTimeStrategy deliveryTimeStrategy() {
-	 * return new SimpleDeliveryTimeStrategy();
-	 * }
-	 */
+	@Bean
+	public DeliveryTimeStrategy simpleDeliveryTimeStrategy() {
+		return new SimpleDeliveryTimeStrategy();
+	}
+
+	@Bean
+	@Profile("pizzaType")
+	@Primary
+	public DeliveryTimeStrategy pizzaTypeDeliveryTimeStrategy() {
+		return new PizzaTypeDeliveryTimeStrategy();
+	}
 
 	@Bean
 	public MessageTemplateService messageTemplate() {
