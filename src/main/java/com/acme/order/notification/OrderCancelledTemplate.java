@@ -1,5 +1,8 @@
 package com.acme.order.notification;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class OrderCancelledTemplate implements Template {
 
 	@Override

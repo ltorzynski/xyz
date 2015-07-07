@@ -7,9 +7,12 @@ import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.stereotype.Repository;
+
 import com.acme.order.pizza.PizzaOrder;
 
 @Slf4j
+@Repository
 public class HashMapOrderRepository implements OrderRepository {
 
 	private final Map<String, PizzaOrder> database = new HashMap<>();

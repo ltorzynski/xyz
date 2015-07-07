@@ -2,6 +2,9 @@ package com.acme.order.notification;
 
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class DeliveryTemplate implements Template {
 
 	private Date deliveryDate;
